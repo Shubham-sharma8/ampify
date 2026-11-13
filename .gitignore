@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Build artifacts
+build/
+.build/
+DerivedData/
+*.xcarchive
+
+# Disk images & local reference binaries
+*.dmg
+Amply-1.6.3.dmg
+Ampify.app/
+
+# Xcode user state
+xcuserdata/
+*.xcworkspace/xcuserdata/

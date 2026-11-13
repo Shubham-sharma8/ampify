@@ -1,0 +1,515 @@
+{
+ "note": "Apple's out-of-warranty battery service, read by hand per docs/battery-service-prices-plan.md 2.2. Never fetched by the app.",
+ "regions": {
+  "CA": {
+   "asOf": "2026-11-11",
+   "currency": "CAD",
+   "locale": "en-ca",
+   "tiers": [
+    {
+     "amount": 219,
+     "models": [
+      "MacBookAir10,1",
+      "Mac14,2",
+      "Mac15,12"
+     ]
+    },
+    {
+     "amount": 249,
+     "models": [
+      "Mac16,12",
+      "Mac17,3"
+     ]
+    },
+    {
+     "amount": 269,
+     "models": [
+      "Mac14,15",
+      "Mac15,13",
+      "Mac16,13",
+      "Mac17,4"
+     ]
+    },
+    {
+     "amount": 319,
+     "models": [
+      "Mac17,2",
+      "Mac18,1",
+      "Mac17,7",
+      "Mac17,9",
+      "Mac17,11",
+      "Mac17,13"
+     ]
+    },
+    {
+     "amount": 339,
+     "models": [
+      "Mac17,6",
+      "Mac17,8",
+      "Mac17,10",
+      "Mac17,12",
+      "MacBookPro17,1",
+      "Mac14,7",
+      "MacBookPro18,1",
+      "MacBookPro18,2",
+      "MacBookPro18,3",
+      "MacBookPro18,4",
+      "Mac14,5",
+      "Mac14,6",
+      "Mac14,9",
+      "Mac14,10",
+      "Mac15,3",
+      "Mac15,6",
+      "Mac15,7",
+      "Mac15,8",
+      "Mac15,9",
+      "Mac15,10",
+      "Mac15,11",
+      "Mac16,1",
+      "Mac16,5",
+      "Mac16,6",
+      "Mac16,7",
+      "Mac16,8"
+     ]
+    },
+    {
+     "amount": 135,
+     "models": [
+      "iPhone17,3",
+      "iPhone15,4"
+     ]
+    },
+    {
+     "amount": 119,
+     "models": [
+      "iPhone14,5"
+     ]
+    }
+   ]
+  },
+  "DE": {
+   "asOf": "2026-11-11",
+   "currency": "EUR",
+   "locale": "de-de",
+   "tiers": [
+    {
+     "amount": 185,
+     "models": [
+      "MacBookAir10,1",
+      "Mac14,2",
+      "Mac15,12"
+     ]
+    },
+    {
+     "amount": 199,
+     "models": [
+      "Mac16,12",
+      "Mac17,3"
+     ]
+    },
+    {
+     "amount": 225,
+     "models": [
+      "Mac14,15",
+      "Mac15,13",
+      "Mac16,13",
+      "Mac17,4"
+     ]
+    },
+    {
+     "amount": 269,
+     "models": [
+      "Mac17,2",
+      "Mac18,1",
+      "Mac17,7",
+      "Mac17,9",
+      "Mac17,11",
+      "Mac17,13"
+     ]
+    },
+    {
+     "amount": 289,
+     "models": [
+      "Mac17,6",
+      "Mac17,8",
+      "Mac17,10",
+      "Mac17,12",
+      "MacBookPro17,1",
+      "Mac14,7",
+      "MacBookPro18,1",
+      "MacBookPro18,2",
+      "MacBookPro18,3",
+      "MacBookPro18,4",
+      "Mac14,5",
+      "Mac14,6",
+      "Mac14,9",
+      "Mac14,10",
+      "Mac15,3",
+      "Mac15,6",
+      "Mac15,7",
+      "Mac15,8",
+      "Mac15,9",
+      "Mac15,10",
+      "Mac15,11",
+      "Mac16,1",
+      "Mac16,5",
+      "Mac16,6",
+      "Mac16,7",
+      "Mac16,8"
+     ]
+    },
+    {
+     "amount": 109,
+     "models": [
+      "iPhone17,3",
+      "iPhone15,4"
+     ]
+    },
+    {
+     "amount": 99,
+     "models": [
+      "iPhone14,5"
+     ]
+    }
+   ]
+  },
+  "FR": {
+   "asOf": "2026-11-11",
+   "currency": "EUR",
+   "locale": "fr-fr",
+   "tiers": [
+    {
+     "amount": 185,
+     "models": [
+      "MacBookAir10,1",
+      "Mac14,2",
+      "Mac15,12"
+     ]
+    },
+    {
+     "amount": 199,
+     "models": [
+      "Mac16,12",
+      "Mac17,3"
+     ]
+    },
+    {
+     "amount": 225,
+     "models": [
+      "Mac14,15",
+      "Mac15,13",
+      "Mac16,13",
+      "Mac17,4"
+     ]
+    },
+    {
+     "amount": 269,
+     "models": [
+      "Mac17,2",
+      "Mac18,1",
+      "Mac17,7",
+      "Mac17,9",
+      "Mac17,11",
+      "Mac17,13"
+     ]
+    },
+    {
+     "amount": 289,
+     "models": [
+      "Mac17,6",
+      "Mac17,8",
+      "Mac17,10",
+      "Mac17,12",
+      "MacBookPro17,1",
+      "Mac14,7",
+      "MacBookPro18,1",
+      "MacBookPro18,2",
+      "MacBookPro18,3",
+      "MacBookPro18,4",
+      "Mac14,5",
+      "Mac14,6",
+      "Mac14,9",
+      "Mac14,10",
+      "Mac15,3",
+      "Mac15,6",
+      "Mac15,7",
+      "Mac15,8",
+      "Mac15,9",
+      "Mac15,10",
+      "Mac15,11",
+      "Mac16,1",
+      "Mac16,5",
+      "Mac16,6",
+      "Mac16,7",
+      "Mac16,8"
+     ]
+    }
+   ]
+  },
+  "GB": {
+   "asOf": "2026-11-11",
+   "currency": "GBP",
+   "locale": "en-gb",
+   "tiers": [
+    {
+     "amount": 159,
+     "models": [
+      "MacBookAir10,1",
+      "Mac14,2",
+      "Mac15,12"
+     ]
+    },
+    {
+     "amount": 179,
+     "models": [
+      "Mac16,12",
+      "Mac17,3"
+     ]
+    },
+    {
+     "amount": 189,
+     "models": [
+      "Mac14,15",
+      "Mac15,13",
+      "Mac16,13",
+      "Mac17,4"
+     ]
+    },
+    {
+     "amount": 225,
+     "models": [
+      "Mac17,2",
+      "Mac18,1",
+      "Mac17,7",
+      "Mac17,9",
+      "Mac17,11",
+      "Mac17,13"
+     ]
+    },
+    {
+     "amount": 245,
+     "models": [
+      "Mac17,6",
+      "Mac17,8",
+      "Mac17,10",
+      "Mac17,12",
+      "MacBookPro17,1",
+      "Mac14,7",
+      "MacBookPro18,1",
+      "MacBookPro18,2",
+      "MacBookPro18,3",
+      "MacBookPro18,4",
+      "Mac14,5",
+      "Mac14,6",
+      "Mac14,9",
+      "Mac14,10",
+      "Mac15,3",
+      "Mac15,6",
+      "Mac15,7",
+      "Mac15,8",
+      "Mac15,9",
+      "Mac15,10",
+      "Mac15,11",
+      "Mac16,1",
+      "Mac16,5",
+      "Mac16,6",
+      "Mac16,7",
+      "Mac16,8"
+     ]
+    },
+    {
+     "amount": 95,
+     "models": [
+      "iPhone17,3",
+      "iPhone15,4"
+     ]
+    },
+    {
+     "amount": 85,
+     "models": [
+      "iPhone14,5"
+     ]
+    }
+   ]
+  },
+  "JP": {
+   "asOf": "2026-11-11",
+   "currency": "JPY",
+   "locale": "ja-jp",
+   "tiers": [
+    {
+     "amount": 26800,
+     "models": [
+      "MacBookAir10,1",
+      "Mac14,2",
+      "Mac15,12"
+     ]
+    },
+    {
+     "amount": 30800,
+     "models": [
+      "Mac16,12",
+      "Mac17,3"
+     ]
+    },
+    {
+     "amount": 33800,
+     "models": [
+      "Mac14,15",
+      "Mac15,13",
+      "Mac16,13",
+      "Mac17,4"
+     ]
+    },
+    {
+     "amount": 39500,
+     "models": [
+      "Mac17,2",
+      "Mac18,1",
+      "Mac17,7",
+      "Mac17,9",
+      "Mac17,11",
+      "Mac17,13"
+     ]
+    },
+    {
+     "amount": 42500,
+     "models": [
+      "Mac17,6",
+      "Mac17,8",
+      "Mac17,10",
+      "Mac17,12",
+      "MacBookPro17,1",
+      "Mac14,7",
+      "MacBookPro18,1",
+      "MacBookPro18,2",
+      "MacBookPro18,3",
+      "MacBookPro18,4",
+      "Mac14,5",
+      "Mac14,6",
+      "Mac14,9",
+      "Mac14,10",
+      "Mac15,3",
+      "Mac15,6",
+      "Mac15,7",
+      "Mac15,8",
+      "Mac15,9",
+      "Mac15,10",
+      "Mac15,11",
+      "Mac16,1",
+      "Mac16,5",
+      "Mac16,6",
+      "Mac16,7",
+      "Mac16,8"
+     ]
+    },
+    {
+     "amount": 17200,
+     "models": [
+      "iPhone17,3",
+      "iPhone15,4"
+     ]
+    },
+    {
+     "amount": 15600,
+     "models": [
+      "iPhone14,5"
+     ]
+    }
+   ]
+  },
+  "US": {
+   "asOf": "2026-11-11",
+   "currency": "USD",
+   "locale": "en-us",
+   "tiers": [
+    {
+     "amount": 159,
+     "models": [
+      "MacBookAir10,1",
+      "Mac14,2",
+      "Mac15,12"
+     ]
+    },
+    {
+     "amount": 179,
+     "models": [
+      "Mac16,12",
+      "Mac17,3"
+     ]
+    },
+    {
+     "amount": 199,
+     "models": [
+      "Mac14,15",
+      "Mac15,13",
+      "Mac16,13",
+      "Mac17,4"
+     ]
+    },
+    {
+     "amount": 229,
+     "models": [
+      "Mac17,2",
+      "Mac18,1",
+      "Mac17,7",
+      "Mac17,9",
+      "Mac17,11",
+      "Mac17,13"
+     ]
+    },
+    {
+     "amount": 249,
+     "models": [
+      "Mac17,6",
+      "Mac17,8",
+      "Mac17,10",
+      "Mac17,12",
+      "MacBookPro17,1",
+      "Mac14,7",
+      "MacBookPro18,1",
+      "MacBookPro18,2",
+      "MacBookPro18,3",
+      "MacBookPro18,4",
+      "Mac14,5",
+      "Mac14,6",
+      "Mac14,9",
+      "Mac14,10",
+      "Mac15,3",
+      "Mac15,6",
+      "Mac15,7",
+      "Mac15,8",
+      "Mac15,9",
+      "Mac15,10",
+      "Mac15,11",
+      "Mac16,1",
+      "Mac16,5",
+      "Mac16,6",
+      "Mac16,7",
+      "Mac16,8"
+     ]
+    },
+    {
+     "amount": 99,
+     "models": [
+      "iPhone17,3",
+      "iPhone15,4"
+     ]
+    },
+    {
+     "amount": 89,
+     "models": [
+      "iPhone14,5"
+     ]
+    },
+    {
+     "amount": 99,
+     "models": [
+      "iPad12,1",
+      "iPad12,2"
+     ]
+    }
+   ]
+  }
+ }
+}
