@@ -354,6 +354,37 @@ public enum BluetoothBatteryScanner {
         var nearbyAppleNames: [String] = []
         var seenNames = Set<String>()
 
+        // 0. Query `/usr/bin/pmset -g accps` for live macOS accessory power sources (BLE Mice, Keyboards, AirPods, Pencil)
+        var accpsPercentages: [String: Int] = [:]
+        let pmsetProc = Process()
+        pmsetProc.executableURL = URL(fileURLWithPath: "/usr/bin/pmset")
+        pmsetProc.arguments = ["-g", "accps"]
+        let pmsetPipe = Pipe()
+        pmsetProc.standardOutput = pmsetPipe
+        pmsetProc.standardError = FileHandle.nullDevice
+        do {
+            try pmsetProc.run()
+            let pmsetData = pmsetPipe.fileHandleForReading.readDataToEndOfFile()
+            pmsetProc.waitUntilExit()
+            if let text = String(data: pmsetData, encoding: .utf8) {
+                for rawLine in text.components(separatedBy: .newlines) {
+                    let line = rawLine.trimmingCharacters(in: .whitespaces)
+                    guard line.hasPrefix("-"), !line.lowercased().contains("internalbattery") else { continue }
+                    // Format: "-LIFT (id=38015880)\t95%; discharging"
+                    let withoutDash = String(line.dropFirst()).trimmingCharacters(in: .whitespaces)
+                    guard let parenRange = withoutDash.range(of: " (id=") else { continue }
+                    let accName = String(withoutDash[..<parenRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+                    let remainder = String(withoutDash[parenRange.upperBound...])
+                    if let pctMatch = remainder.range(of: #"\b([0-9]{1,3})%"#, options: .regularExpression) {
+                        let numStr = remainder[pctMatch].replacingOccurrences(of: "%", with: "")
+                        if let pct = Int(numStr), pct > 0 {
+                            accpsPercentages[accName] = pct
+                        }
+                    }
+                }
+            }
+        } catch {}
+
         // 1. Query IORegistry for AppleDeviceManagementHIDEventService (Magic Keyboard/Mouse/Trackpad)
         var iterator: io_iterator_t = 0
         if IOServiceGetMatchingServices(kIOMainPortDefault, IOServiceMatching("AppleDeviceManagementHIDEventService"), &iterator) == KERN_SUCCESS {
@@ -434,7 +465,8 @@ public enum BluetoothBatteryScanner {
                                 let leftPct = parsePercent(info["device_batteryLevelLeft"])
                                 let rightPct = parsePercent(info["device_batteryLevelRight"])
                                 let casePct = parsePercent(info["device_batteryLevelCase"])
-                                let primary = mainPct ?? leftPct ?? rightPct ?? casePct
+                                let pmsetPct = accpsPercentages[deviceName]
+                                let primary = mainPct ?? leftPct ?? rightPct ?? casePct ?? pmsetPct
 
                                 let minorType = (info["device_minorType"] as? String)?.lowercased() ?? ""
                                 let kind: BluetoothAccessoryBattery.Kind
@@ -475,6 +507,37 @@ public enum BluetoothBatteryScanner {
                 }
             }
         } catch {}
+
+        // 3. Include any remaining live accessories reported by `pmset -g accps` not already in SPBluetoothDataType
+        for (accName, pct) in accpsPercentages where !seenNames.contains(accName) {
+            let lowered = accName.lowercased()
+            let kind: BluetoothAccessoryBattery.Kind
+            if lowered.contains("pencil") {
+                kind = .applePencil
+            } else if lowered.contains("siri remote") || lowered.contains("apple tv") || lowered.contains("remote") {
+                kind = .appleTVRemote
+            } else if lowered.contains("airpods") || lowered.contains("beats") {
+                kind = .earbuds
+            } else if lowered.contains("keyboard") {
+                kind = .keyboard
+            } else if lowered.contains("mouse") || lowered.contains("lift") || lowered.contains("mx ") {
+                kind = .mouse
+            } else if lowered.contains("trackpad") {
+                kind = .trackpad
+            } else {
+                kind = .other
+            }
+            seenNames.insert(accName)
+            accessories.append(
+                BluetoothAccessoryBattery(
+                    id: "accps-\(accName)",
+                    name: accName,
+                    kind: kind,
+                    isConnected: true,
+                    primaryPercent: pct
+                )
+            )
+        }
 
         return ScanOutput(accessories: accessories, nearbyBluetoothAppleDeviceNames: nearbyAppleNames)
     }

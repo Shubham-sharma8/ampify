@@ -199,13 +199,15 @@ public final class BatteryStore: ObservableObject {
 
         // Load previously discovered paired iOS/watchOS devices so they appear immediately
         if let cachedDevices: [ConnectedAppleDevice] = Self.loadCodable(key: "ampify.appleDevices") {
-            self.appleDevices = cachedDevices
+            self.appleDevices = cachedDevices.filter { $0.udid != "00008112-001420911AA2401B" }
         }
 
         seedOrLoadHistoricalLedgers(current: initialReading)
         setupWorkspaceSleepObservers()
-        refreshAll()
-        startPolling()
+        if !CommandLine.arguments.contains("--render-marketing") {
+            refreshAll()
+            startPolling()
+        }
     }
 
     // MARK: - Polling & Refresh
@@ -303,181 +305,78 @@ public final class BatteryStore: ObservableObject {
     public var ecosystemDeviceSlots: [EcosystemDeviceSlot] {
         var slots: [EcosystemDeviceSlot] = []
 
-        // 1. iPhone (live Wi-Fi / USB or fallback)
-        if let phone = appleDevices.first(where: { $0.kind == .iPhone }) {
+        // 1. Real paired iPhone, iPad & Apple Watch discovered over Wi-Fi / USB / CompanionProxy
+        for dev in appleDevices {
+            let category: EcosystemDeviceSlot.Category
+            let shortLabel: String
+            switch dev.kind {
+            case .iPhone:
+                category = .iPhone
+                shortLabel = "iPhone"
+            case .iPad:
+                category = .iPad
+                shortLabel = "iPad"
+            case .appleWatch:
+                category = .appleWatch
+                shortLabel = "Watch"
+            }
             slots.append(
                 EcosystemDeviceSlot(
-                    id: phone.udid,
-                    name: phone.name,
-                    shortLabel: "iPhone",
-                    category: .iPhone,
-                    percent: phone.batteryPercent,
-                    isCharging: phone.isCharging,
+                    id: dev.udid,
+                    name: dev.name,
+                    shortLabel: shortLabel,
+                    category: category,
+                    percent: dev.batteryPercent,
+                    isCharging: dev.isCharging,
                     isLiveConnected: true,
-                    detailText: phone.isCharging ? "Charging · Wi-Fi" : "Wi-Fi · \(phone.seenAgoText)"
-                )
-            )
-        } else {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: "slot-iphone",
-                    name: "iPhone",
-                    shortLabel: "iPhone",
-                    category: .iPhone,
-                    percent: 60,
-                    isCharging: false,
-                    isLiveConnected: false,
-                    detailText: "Wi-Fi Standby"
+                    detailText: dev.isCharging ? "Charging" : "Wi-Fi · \(dev.seenAgoText)"
                 )
             )
         }
 
-        // 2. iPad (live Wi-Fi / USB or fallback)
-        if let ipad = appleDevices.first(where: { $0.kind == .iPad }) {
+        // 2. Real Bluetooth & HID accessories that report an actual battery percentage
+        for acc in bluetoothAccessories {
+            guard let pct = acc.primaryPercent, pct > 0 else { continue }
+            let category: EcosystemDeviceSlot.Category
+            let defaultShort: String
+            switch acc.kind {
+            case .earbuds, .headphones:
+                category = .airPods
+                defaultShort = "AirPods"
+            case .applePencil:
+                category = .applePencil
+                defaultShort = "Pencil"
+            case .appleTVRemote:
+                category = .appleTV
+                defaultShort = "Apple TV"
+            case .keyboard:
+                category = .keyboard
+                defaultShort = "Keyboard"
+            case .mouse:
+                category = .mouse
+                defaultShort = acc.name.count <= 10 ? acc.name : "Mouse"
+            case .trackpad:
+                category = .trackpad
+                defaultShort = "Trackpad"
+            case .other:
+                category = .mouse
+                defaultShort = acc.name.count <= 10 ? acc.name : "Bluetooth"
+            }
             slots.append(
                 EcosystemDeviceSlot(
-                    id: ipad.udid,
-                    name: ipad.name,
-                    shortLabel: "iPad",
-                    category: .iPad,
-                    percent: ipad.batteryPercent,
-                    isCharging: ipad.isCharging,
-                    isLiveConnected: true,
-                    detailText: ipad.isCharging ? "Charging" : "Wi-Fi · \(ipad.seenAgoText)"
-                )
-            )
-        } else {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: "slot-ipad",
-                    name: "iPad Pro",
-                    shortLabel: "iPad",
-                    category: .iPad,
-                    percent: 57,
-                    isCharging: true,
-                    isLiveConnected: false,
-                    detailText: "Charging"
-                )
-            )
-        }
-
-        // 3. Apple Watch (live companion_proxy or fallback)
-        if let watch = appleDevices.first(where: { $0.kind == .appleWatch }) {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: watch.udid,
-                    name: watch.name,
-                    shortLabel: "Watch",
-                    category: .appleWatch,
-                    percent: watch.batteryPercent,
-                    isCharging: watch.isCharging,
-                    isLiveConnected: true,
-                    detailText: watch.isCharging ? "Charging" : "Paired · \(watch.seenAgoText)"
-                )
-            )
-        } else {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: "slot-watch",
-                    name: "Apple Watch",
-                    shortLabel: "Watch",
-                    category: .appleWatch,
-                    percent: 89,
-                    isCharging: false,
-                    isLiveConnected: false,
-                    detailText: "Paired"
+                    id: acc.id,
+                    name: acc.name,
+                    shortLabel: defaultShort,
+                    category: category,
+                    percent: pct,
+                    isCharging: (acc.casePercent ?? 0) > 0 && !acc.isConnected,
+                    isLiveConnected: acc.isConnected,
+                    detailText: acc.detailSummary
                 )
             )
         }
 
-        // 4. AirPods / Beats (live Bluetooth or fallback)
-        if let buds = bluetoothAccessories.first(where: { $0.kind == .earbuds || $0.kind == .headphones }) {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: buds.id,
-                    name: buds.name,
-                    shortLabel: "AirPods",
-                    category: .airPods,
-                    percent: buds.primaryPercent ?? 93,
-                    isCharging: (buds.casePercent ?? 0) > 0 && !buds.isConnected,
-                    isLiveConnected: buds.isConnected,
-                    detailText: buds.detailSummary
-                )
-            )
-        } else {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: "slot-airpods",
-                    name: "AirPods Pro",
-                    shortLabel: "AirPods",
-                    category: .airPods,
-                    percent: 93,
-                    isCharging: false,
-                    isLiveConnected: false,
-                    detailText: "In Case"
-                )
-            )
-        }
-
-        // 5. Apple Pencil
-        if let pencil = bluetoothAccessories.first(where: { $0.kind == .applePencil }) {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: pencil.id,
-                    name: pencil.name,
-                    shortLabel: "Pencil",
-                    category: .applePencil,
-                    percent: pencil.primaryPercent ?? 100,
-                    isCharging: true,
-                    isLiveConnected: pencil.isConnected,
-                    detailText: pencil.detailSummary
-                )
-            )
-        } else {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: "slot-pencil",
-                    name: "Apple Pencil Pro",
-                    shortLabel: "Pencil",
-                    category: .applePencil,
-                    percent: 100,
-                    isCharging: true,
-                    isLiveConnected: false,
-                    detailText: "Magnetic Dock"
-                )
-            )
-        }
-
-        // 6. Apple TV / Siri Remote
-        if let remote = bluetoothAccessories.first(where: { $0.kind == .appleTVRemote }) {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: remote.id,
-                    name: remote.name,
-                    shortLabel: "Apple TV",
-                    category: .appleTV,
-                    percent: remote.primaryPercent ?? 84,
-                    isCharging: false,
-                    isLiveConnected: remote.isConnected,
-                    detailText: remote.detailSummary
-                )
-            )
-        } else {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: "slot-atv",
-                    name: "Apple TV Remote",
-                    shortLabel: "Apple TV",
-                    category: .appleTV,
-                    percent: 84,
-                    isCharging: false,
-                    isLiveConnected: false,
-                    detailText: "Siri Remote"
-                )
-            )
-        }
-
-        // 7. This Mac
+        // 3. This Mac (always present with live hardware battery percentage)
         slots.append(
             EcosystemDeviceSlot(
                 id: "slot-this-mac",
@@ -490,36 +389,6 @@ public final class BatteryStore: ObservableObject {
                 detailText: statusExplanation.badgeText
             )
         )
-
-        // 8. Magic Mouse / Keyboard / Trackpad
-        if let inputAcc = bluetoothAccessories.first(where: { $0.kind == .mouse || $0.kind == .keyboard || $0.kind == .trackpad }) {
-            let cat: EcosystemDeviceSlot.Category = (inputAcc.kind == .mouse) ? .mouse : ((inputAcc.kind == .trackpad) ? .trackpad : .keyboard)
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: inputAcc.id,
-                    name: inputAcc.name,
-                    shortLabel: cat.defaultTitle,
-                    category: cat,
-                    percent: inputAcc.primaryPercent ?? 92,
-                    isCharging: false,
-                    isLiveConnected: inputAcc.isConnected,
-                    detailText: inputAcc.detailSummary
-                )
-            )
-        } else {
-            slots.append(
-                EcosystemDeviceSlot(
-                    id: "slot-mouse",
-                    name: "Magic Mouse",
-                    shortLabel: "Mouse",
-                    category: .mouse,
-                    percent: 95,
-                    isCharging: false,
-                    isLiveConnected: false,
-                    detailText: "Bluetooth"
-                )
-            )
-        }
 
         return slots
     }
@@ -534,7 +403,7 @@ public final class BatteryStore: ObservableObject {
         }
     }
 
-    public func syncWidgetSnapshot() {
+    public func syncWidgetSnapshot(persistToDisk: Bool = true) {
         let phone = appleDevices.first(where: { $0.kind == .iPhone || $0.kind == .iPad })
         let watch = appleDevices.first(where: { $0.kind == .appleWatch })
         let powerItems: [WidgetAppPowerItem] = topEnergyApps.prefix(4).map { entry in
@@ -581,7 +450,9 @@ public final class BatteryStore: ObservableObject {
             appPowerSubtitle: powerSub
         )
         latestWidgetSnapshot = snap
-        WidgetBridge.write(snap)
+        if persistToDisk && !CommandLine.arguments.contains("--render-marketing") {
+            WidgetBridge.write(snap)
+        }
     }
 
     // MARK: - Charge Limit & Temporary Full Charge Controls

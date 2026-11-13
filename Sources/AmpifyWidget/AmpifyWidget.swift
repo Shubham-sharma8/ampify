@@ -143,11 +143,13 @@ public struct EcosystemDevicesWidgetView: View {
                     showLabels: true,
                     compact: false
                 )
-                AppleDevicesLiquidStripCard(
-                    slots: Array(slots.dropFirst(4).prefix(4)),
-                    showLabels: true,
-                    compact: false
-                )
+                if slots.count > 4 {
+                    AppleDevicesLiquidStripCard(
+                        slots: Array(slots.dropFirst(4).prefix(4)),
+                        showLabels: true,
+                        compact: false
+                    )
+                }
             }
             .padding(12)
             .ampifyWidgetBackground()
@@ -433,8 +435,8 @@ public struct AmpifyEcosystemWidget: Widget {
         StaticConfiguration(kind: kind, provider: SnapshotProvider()) { entry in
             EcosystemDevicesWidgetView(entry: entry)
         }
-        .configurationDisplayName("iPad, Pencil, Watch & Apple TV")
-        .description("Liquid-wave battery levels across iPad, Apple Pencil, Apple Watch, Apple TV Siri Remote, iPhone & AirPods.")
+        .configurationDisplayName("Apple Ecosystem & Accessories")
+        .description("Liquid-wave battery levels across your connected iPhone, Apple Watch, AirPods, Mouse, Keyboard, and Mac.")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }

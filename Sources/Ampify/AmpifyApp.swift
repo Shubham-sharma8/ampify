@@ -266,7 +266,7 @@ public enum MarketingShowcaseRenderer {
                 topUpScheduledAt: Date().addingTimeInterval(10 * 3600)
             )
         ]
-        store.syncWidgetSnapshot()
+        store.syncWidgetSnapshot(persistToDisk: false)
 
         // 1. Hero Popover + Now Dashboard
         store.selectedSection = .now

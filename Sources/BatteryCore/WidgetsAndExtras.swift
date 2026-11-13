@@ -97,20 +97,15 @@ public struct EcosystemDeviceSlot: Identifiable, Codable, Equatable, Sendable {
 
     public static var defaultFourStrip: [EcosystemDeviceSlot] {
         [
-            EcosystemDeviceSlot(id: "slot-iphone", name: "iPhone 15 Plus", shortLabel: "iPhone", category: .iPhone, percent: 60, isCharging: false, isLiveConnected: true, detailText: "Wi-Fi"),
-            EcosystemDeviceSlot(id: "slot-ipad", name: "iPad Pro", shortLabel: "iPad", category: .iPad, percent: 57, isCharging: true, isLiveConnected: true, detailText: "Charging"),
-            EcosystemDeviceSlot(id: "slot-watch", name: "Apple Watch", shortLabel: "Watch", category: .appleWatch, percent: 89, isCharging: false, isLiveConnected: true, detailText: "Paired"),
-            EcosystemDeviceSlot(id: "slot-airpods", name: "AirPods Pro", shortLabel: "AirPods", category: .airPods, percent: 93, isCharging: false, isLiveConnected: true, detailText: "Case 96%")
+            EcosystemDeviceSlot(id: "slot-iphone", name: "iPhone 15 Plus", shortLabel: "iPhone", category: .iPhone, percent: 72, isCharging: false, isLiveConnected: true, detailText: "Wi-Fi"),
+            EcosystemDeviceSlot(id: "slot-watch", name: "Apple Watch", shortLabel: "Watch", category: .appleWatch, percent: 58, isCharging: false, isLiveConnected: true, detailText: "Paired"),
+            EcosystemDeviceSlot(id: "slot-mouse", name: "LIFT", shortLabel: "LIFT", category: .mouse, percent: 95, isCharging: false, isLiveConnected: true, detailText: "Connected · 95%"),
+            EcosystemDeviceSlot(id: "slot-mac", name: "This Mac", shortLabel: "This Mac", category: .mac, percent: 80, isCharging: false, isLiveConnected: true, detailText: "80% Hold")
         ]
     }
 
     public static var defaultExtendedEcosystem: [EcosystemDeviceSlot] {
-        defaultFourStrip + [
-            EcosystemDeviceSlot(id: "slot-pencil", name: "Apple Pencil Pro", shortLabel: "Pencil", category: .applePencil, percent: 100, isCharging: true, isLiveConnected: true, detailText: "Magnetic Dock"),
-            EcosystemDeviceSlot(id: "slot-atv", name: "Apple TV Siri Remote", shortLabel: "Apple TV", category: .appleTV, percent: 84, isCharging: false, isLiveConnected: true, detailText: "Living Room"),
-            EcosystemDeviceSlot(id: "slot-mac", name: "This MacBook", shortLabel: "MacBook", category: .mac, percent: 80, isCharging: false, isLiveConnected: true, detailText: "80% Hold"),
-            EcosystemDeviceSlot(id: "slot-mouse", name: "Magic Mouse / Lift", shortLabel: "Mouse", category: .mouse, percent: 95, isCharging: false, isLiveConnected: true, detailText: "Bluetooth")
-        ]
+        defaultFourStrip
     }
 }
 

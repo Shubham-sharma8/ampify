@@ -927,13 +927,13 @@ public struct DashboardView: View {
 
     private var devicesTabContent: some View {
         VStack(alignment: .leading, spacing: 14) {
-            // 8-Device Apple Ecosystem Liquid-Wave Showcase
+            // Connected Apple Ecosystem Liquid-Wave Showcase
             AmpifyCard {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
                         AmpifySectionHeader(
                             title: "Apple Ecosystem Battery Strip",
-                            subtitle: "Live liquid-wave battery levels across iPhone, iPad, Apple Watch, AirPods, Apple Pencil, Apple TV Remote & Mac"
+                            subtitle: "Live liquid-wave battery levels across your connected Apple & Bluetooth devices"
                         )
                         Spacer()
                         Button {
@@ -1246,18 +1246,20 @@ public struct DashboardView: View {
                 }
             }
 
-            // Extended Apple Ecosystem Widget (Pencil, Apple TV, Watch, iPad) & Classic Battery Widgets
-            AmpifyCard {
-                VStack(alignment: .leading, spacing: 10) {
-                    AmpifySectionHeader(
-                        title: "Extended Apple Ecosystem Widget (Pencil, Apple TV, Mac & Peripherals)",
-                        subtitle: "Available in Small, Medium, and Large sizes in the macOS Widget Gallery"
-                    )
-                    AppleDevicesLiquidStripCard(
-                        slots: Array(store.ecosystemDeviceSlots.dropFirst(4).prefix(4)),
-                        showLabels: true,
-                        compact: true
-                    )
+            // Extended Apple Ecosystem Widget Preview (only shown if more than 4 devices are connected)
+            if store.ecosystemDeviceSlots.count > 4 {
+                AmpifyCard {
+                    VStack(alignment: .leading, spacing: 10) {
+                        AmpifySectionHeader(
+                            title: "Extended Apple Ecosystem Widget",
+                            subtitle: "Additional connected devices shown in Medium & Large widget sizes"
+                        )
+                        AppleDevicesLiquidStripCard(
+                            slots: Array(store.ecosystemDeviceSlots.dropFirst(4).prefix(4)),
+                            showLabels: true,
+                            compact: true
+                        )
+                    }
                 }
             }
 
